@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Curiosity Universe 🌌</title>
+
+<meta name="description" content="Explore amazing facts about Earth, Ocean, and Space in Curiosity Universe. Unlock worlds, discover creatures, and learn fun science facts every day.">
+
+<meta name="keywords" content="fun facts, science facts, earth facts, ocean facts, space facts, curiosity universe, learning game, educational website">
+
+<meta name="author" content="Curiosity Universe">
+
+<meta name="robots" content="index, follow">
+
+<meta name="theme-color" content="#6a5acd">
+
+
+<!-- Social Media Preview -->
+
+<meta property="og:title" content="Curiosity Universe 🌌">
+<meta property="og:description" content="Discover amazing facts from Earth, Ocean, and Space. Unlock worlds and explore knowledge!">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/3212/3212608.png">
+<meta property="og:url" content="https://yourdomain.com">
+
+
+<!-- Twitter Preview -->
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Curiosity Universe 🌌">
+<meta name="twitter:description" content="Explore fun facts about Earth, Ocean, and Space.">
+<meta name="twitter:image" content="https://cdn-icons-png.flaticon.com/512/3212/3212608.png">
+
+
+<!-- Favicon -->
+
+<link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3212/3212608.png">
+
+
+
+
+<style>
+
+body{
+margin:0;
+font-family:'Trebuchet MS',sans-serif;
+background:linear-gradient(180deg,#ff9a9e,#fad0c4,#fbc2eb,#a6c1ee);
+min-height:100vh;
+overflow:hidden;
+}
+
+h1{
+position:absolute;
+top:18px;
+width:100%;
+text-align:center;
+color:white;
+font-size:34px;
+text-shadow:2px 2px 10px rgba(0,0,0,.35);
+}
+
+/* GLOBAL PROGRESS BAR */
+
+#globalProgress{
+position:fixed;
+top:0;
+left:0;
+height:5px;
+background:linear-gradient(90deg,#00f5d4,#00bbf9,#9b5de5);
+width:0%;
+transition:width .4s;
+z-index:999;
+}
+
+/* FIXED TEXT POSITION (NO OVERLAP) */
+
+#counter{
+position:absolute;
+top:95px;
+width:100%;
+text-align:center;
+color:white;
+font-weight:bold;
+}
+
+#worldStatus{
+position:absolute;
+top:120px;
+width:100%;
+text-align:center;
+color:white;
+font-size:14px;
+}
+
+/* WORLD PANEL */
+
+.world-panel{
+position:fixed;
+left:15px;
+top:70px;
+background:white;
+padding:12px;
+border-radius:14px;
+box-shadow:0 10px 25px rgba(0,0,0,.2);
+width:170px;
+font-size:13px;
+}
+
+.progressBar{
+height:8px;
+background:#eee;
+border-radius:6px;
+margin:4px 0 10px 0;
+overflow:hidden;
+}
+
+.progressFill{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#ffbe0b,#fb5607);
+transition:width .4s;
+}
+
+/* RIGHT UI PANEL */
+
+.ui-panel{
+position:fixed;
+right:15px;
+top:120px;
+background:white;
+padding:15px;
+border-radius:15px;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+width:200px;
+font-size:14px;
+}
+
+/* BUTTONS */
+
+button{
+border:none;
+padding:8px 12px;
+border-radius:10px;
+margin-top:6px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.journal-btn{background:#7ee8fa}
+.map-btn{background:#ffd166}
+.share-btn{background:#caffbf}
+
+/* FACT POPUP */
+
+.fact-popup{
+position:absolute;
+background:white;
+padding:20px;
+border-radius:20px;
+max-width:260px;
+box-shadow:0 10px 25px rgba(0,0,0,0.25);
+animation:pop .35s ease;
+}
+
+.rarity-common{border-left:8px solid #8ecae6}
+.rarity-rare{border-left:8px solid #3a86ff}
+.rarity-epic{border-left:8px solid #8338ec}
+.rarity-legendary{
+border-left:8px solid gold;
+box-shadow:0 0 20px gold;
+}
+
+@keyframes pop{
+from{transform:scale(.3);opacity:0}
+to{transform:scale(1);opacity:1}
+}
+
+/* BOX */
+
+.box{
+width:70px;
+height:70px;
+background:#ffd166;
+position:absolute;
+border-radius:15px;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+animation:float 4s infinite ease-in-out;
+font-size:28px;
+}
+
+/* CREATURE */
+
+.creature{
+position:absolute;
+font-size:42px;
+cursor:pointer;
+animation:creatureFloat 6s infinite ease-in-out;
+user-select:none;
+}
+
+@keyframes creatureFloat{
+0%{transform:translateY(0)}
+50%{transform:translateY(-25px)}
+100%{transform:translateY(0)}
+}
+
+@keyframes float{
+0%{transform:translateY(0)}
+50%{transform:translateY(-20px)}
+100%{transform:translateY(0)}
+}
+
+/* PARTICLES */
+
+.particle{
+position:absolute;
+width:8px;
+height:8px;
+background:white;
+border-radius:50%;
+pointer-events:none;
+animation:explode 1s forwards;
+}
+
+@keyframes explode{
+to{
+transform:translate(var(--x),var(--y));
+opacity:0
+}
+}
+
+/* JOURNAL */
+
+.journal{
+position:fixed;
+left:20px;
+top:210px;
+background:white;
+padding:15px;
+border-radius:15px;
+width:220px;
+max-height:300px;
+overflow:auto;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+display:none;
+}
+
+/* MAP */
+
+.map{
+position:fixed;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+background:white;
+padding:12px 18px;
+border-radius:20px;
+box-shadow:0 10px 20px rgba(0,0,0,.2);
+font-size:14px;
+}
+
+/* WORLD UNLOCK CELEBRATION */
+
+#celebration{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%) scale(.5);
+background:white;
+padding:30px 40px;
+border-radius:20px;
+font-size:24px;
+font-weight:bold;
+box-shadow:0 20px 40px rgba(0,0,0,.3);
+opacity:0;
+pointer-events:none;
+transition:all .5s;
+z-index:1000;
+}
+
+#celebration.show{
+opacity:1;
+transform:translate(-50%,-50%) scale(1);
+}
+
+/* MIX FACT DOT (BOTTOM LEFT BUTTON) */
+
+#mixFactDot{
+position:fixed;
+bottom:20px;
+left:20px;
+background:linear-gradient(45deg,#ffbe0b,#fb5607,#ff006e);
+color:white;
+padding:10px 14px;
+border-radius:20px;
+font-size:12px;
+font-weight:bold;
+cursor:pointer;
+box-shadow:0 5px 15px rgba(0,0,0,.3);
+transition:transform .2s;
+z-index:999;
+}
+
+#mixFactDot:hover{
+transform:scale(1.08);
+}
+
+/* ---------------- MOBILE RESPONSIVE ---------------- */
+
+@media (max-width: 768px){
+
+body{
+overflow:auto;
+}
+
+/* Title smaller */
+h1{
+font-size:24px;
+top:10px;
+}
+
+/* counter + world text */
+#counter{
+top:70px;
+font-size:14px;
+}
+
+#worldStatus{
+top:90px;
+font-size:12px;
+}
+
+/* world progress panel */
+.world-panel{
+top:auto;
+bottom:90px;
+left:10px;
+width:140px;
+font-size:12px;
+padding:10px;
+}
+
+/* right panel moves lower */
+.ui-panel{
+top:auto;
+bottom:90px;
+right:10px;
+width:150px;
+font-size:12px;
+padding:10px;
+}
+
+/* journal */
+.journal{
+width:85%;
+left:50%;
+transform:translateX(-50%);
+top:140px;
+max-height:250px;
+}
+
+/* boxes smaller for mobile */
+.box{
+width:55px;
+height:55px;
+font-size:22px;
+}
+
+/* creatures smaller */
+.creature{
+font-size:32px;
+}
+
+/* popup smaller */
+.fact-popup{
+max-width:200px;
+font-size:13px;
+padding:14px;
+}
+
+/* bottom center map */
+.map{
+font-size:12px;
+padding:8px 12px;
+}
+
+/* mix fact button */
+#mixFactDot{
+bottom:15px;
+left:15px;
+font-size:11px;
+padding:8px 10px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<!-- GLOBAL PROGRESS BAR -->
+<div id="globalProgress"></div>
+
+<h1>🌌 Curiosity Universe 🌌</h1>
+
+<div id="counter">Facts discovered: 0</div>
+<div id="worldStatus">World: Earth Garden</div>
+
+
+<!-- WORLD PROGRESS PANEL -->
+<div class="world-panel">
+
+<b>World Progress</b><br>
+
+Earth
+<div class="progressBar">
+<div id="earthBar" class="progressFill"></div>
+</div>
+
+Ocean
+<div class="progressBar">
+<div id="oceanBar" class="progressFill"></div>
+</div>
+
+Space
+<div class="progressBar">
+<div id="spaceBar" class="progressFill"></div>
+</div>
+
+</div>
+
+
+<!-- RIGHT UI PANEL -->
+<div class="ui-panel">
+
+<b>Daily Quest</b><br>
+Discover 3 facts<br>
+Find 1 rare fact
+<br>
+
+<button class="journal-btn" onclick="toggleJournal()">📖 Journal</button>
+<button class="map-btn" onclick="showMap()">🌍 Map</button>
+
+</div>
+
+
+<!-- JOURNAL -->
+<div class="journal" id="journal">
+
+<b>📖 Fact Journal</b>
+
+<ul id="journalList"></ul>
+
+</div>
+
+
+<!-- WORLD UNLOCK CELEBRATION -->
+<div id="celebration">
+
+🎉 New World Unlocked!
+
+</div>
+
+
+<!-- MAP INFO -->
+<div class="map" id="mapBox">
+
+🌍 Worlds unlock as you discover facts
+
+</div>
+
+
+<!-- MIXED FACT BUTTON -->
+<div id="mixFactDot">
+
+🌐 All Worlds Fact in One
+
+</div>
+
+
+<!-- JAVASCRIPT -->
+<script src="script.js"></script>
+
+</body>
+
+
+<script>
+/* ---------------- FACT DATABASE ---------------- */
+
+const worldFacts = {
+
+Earth:[
+"Ants can lift up to 50 times their body weight.",
+"Bananas are technically berries.",
+"Koalas have fingerprints very similar to humans.",
+"Penguins propose to their mates with pebbles.",
+"Honey never spoils and can last thousands of years.",
+"Wombat poop is cube-shaped.",
+"Crows can recognize and remember human faces.",
+"Bamboo can grow nearly one meter in a single day.",
+"Some turtles can breathe through their cloaca.",
+"Elephants are the only animals that cannot jump.",
+"Giraffes only need about 5 to 30 minutes of sleep per day.",
+"Sloths move so slowly that algae can grow on their fur.",
+"Octopus arms have their own mini nervous systems.",
+"Some frogs can freeze completely and survive.",
+"Sharks have existed longer than trees.",
+"The Amazon rainforest produces about 20% of the world's oxygen.",
+"Trees can communicate with each other through underground fungi.",
+"Lightning strikes Earth about 8 million times per day.",
+"Mount Everest grows about 4 millimeters each year.",
+"The Sahara Desert was once a green rainforest.",
+"There are more trees on Earth than stars in the Milky Way galaxy.",
+"Some plants can recognize their siblings and grow differently around them.",
+"A single oak tree can support over 500 species of insects.",
+"Bees can recognize human faces.",
+"Butterflies can see ultraviolet light.",
+"Some mushrooms glow in the dark.",
+"A group of flamingos is called a flamboyance.",
+"The smell after rain is called petrichor.",
+"Snails can sleep for up to three years.",
+"Some spiders can glide through the air.",
+"Earthworms have five hearts.",
+"Polar bears have black skin under their white fur.",
+"Owls can rotate their heads up to 270 degrees.",
+"Some fish can climb waterfalls.",
+"The Arctic tern travels about 70,000 km every year during migration.",
+"Seahorses are the only animals where the male gives birth.",
+"Dolphins have unique names for each other.",
+"Ravens can solve complex puzzles.",
+"Some trees can live for over 5,000 years.",
+"The oldest known tree is over 4,800 years old.",
+"Some deserts used to be oceans millions of years ago.",
+"The Great Barrier Reef is the largest living structure on Earth.",
+"A day on Earth is gradually getting longer.",
+"Plants can grow toward sounds.",
+"Some birds can sleep while flying.",
+"Woodpeckers can peck trees 20 times per second.",
+"A blue whale's heart is as big as a small car.",
+"Dragonflies existed before dinosaurs.",
+"Some ants farm fungi for food.",
+"Leafcutter ants can carry leaves many times their body size.",
+"Some snakes can glide between trees.",
+"The platypus can detect electric fields from prey.",
+"Kangaroos cannot walk backward.",
+"Octopuses can open jars to get food.",
+"Some frogs can glow under ultraviolet light.",
+"Many plants release chemicals to warn nearby plants of danger.",
+"Some lizards can run on water.",
+"Elephants can communicate using vibrations through the ground.",
+"Penguins can drink seawater thanks to special glands.",
+"Some plants trap insects for nutrients.",
+"A single cloud can weigh more than a million kilograms.",
+"Raindrops are not actually shaped like teardrops.",
+"The largest desert on Earth is Antarctica.",
+"Volcanoes created most of Earth's atmosphere.",
+"Earth is the only known planet with plate tectonics.",
+"The deepest cave known is over 2 km deep.",
+"Some lakes can explode due to trapped gases.",
+"The Earth's core is as hot as the surface of the Sun.",
+"Earth's magnetic field protects us from solar radiation.",
+"The Himalayas formed from a collision of continents.",
+"Some bacteria can live deep inside rocks.",
+"Termite mounds can be taller than a human.",
+"Some plants can move rapidly when touched.",
+"Venus flytraps count how many times their hairs are triggered.",
+"Some fungi are larger than entire forests.",
+"The largest living organism is a fungus in Oregon.",
+"Coral reefs are built by tiny animals called coral polyps.",
+"Some birds can mimic chainsaws and car alarms.",
+"Parrots are among the most intelligent birds.",
+"Some beetles can shoot hot chemicals at predators.",
+"Bombardier beetles spray boiling liquid as defense.",
+"Some plants smell like rotting meat to attract flies.",
+"Bats are the only mammals capable of true flight.",
+"Some bats eat insects equal to their body weight each night.",
+"Owls can hear prey under snow.",
+"Some animals glow using bioluminescence.",
+"Glow worms produce light to trap insects.",
+"Some spiders decorate their webs with zigzag patterns.",
+"Spider silk is stronger than steel by weight.",
+"Some birds migrate using Earth's magnetic field.",
+"Sea turtles return to the beach where they were born.",
+"Salmon can navigate thousands of kilometers back to their birthplace.",
+"Some fish can breathe air.",
+"Mudskippers can live both on land and water.",
+"Some deserts receive less than 1 cm of rain per year.",
+"The Atacama Desert is one of the driest places on Earth.",
+"Earth has about 1 trillion species of microbes.",
+"Some bacteria can survive extreme heat.",
+"Others live in Antarctic ice.",
+"Some seeds can stay dormant for thousands of years.",
+"Lotus seeds have germinated after 1,000 years.",
+"Some birds can fly non-stop for days.",
+"The bar-tailed godwit holds the longest nonstop migration record.",
+"Some frogs care for their young in their mouths.",
+"Male seahorses carry babies in a pouch.",
+"Some insects can walk on water.",
+"Water striders use surface tension to move.",
+"Some fish can change gender during their lifetime.",
+"Clownfish can switch sex if needed.",
+"Some lizards reproduce without males.",
+"Komodo dragons can reproduce by parthenogenesis.",
+"Some plants explode their seeds to spread them.",
+"Touch-me-not plants close their leaves when touched.",
+"Some trees release chemicals to repel insects.",
+"Certain caterpillars can disguise themselves as bird poop.",
+"Sloths move so slowly that algae can grow on their fur.",
+"Trees can communicate through underground fungi networks.",
+"The Amazon rainforest produces about 20% of Earth's oxygen.",
+"There are more trees on Earth than stars in the Milky Way.",
+"Giraffes only need 5–30 minutes of sleep per day.",
+"Elephants can recognize themselves in mirrors.",
+"Some frogs can freeze and come back to life.",
+"Owls can rotate their heads up to 270 degrees.",
+"Lightning strikes Earth about 100 times every second.",
+"Some mushrooms glow in the dark.",
+"Bees can recognize human faces.",
+"The smell after rain is called petrichor.",
+"Butterflies remember being caterpillars.",
+"The oldest living tree is over 4800 years old.",
+"Elephants can hear sounds through their feet.",
+"The Amazon River is the largest river by water volume.",
+"The Great Barrier Reef is the largest living structure on Earth.",
+"Some seeds can remain dormant for thousands of years.",
+"The largest living organism is a fungus in Oregon.",
+"Beavers build dams that can be seen from space."
+],
+
+Ocean:[
+
+
+"Octopuses have three hearts.",
+"Blue whales are the largest animals ever known.",
+"More than 80% of the ocean is unexplored.",
+"The Mariana Trench is deeper than Mount Everest is tall.",
+"Sea otters hold hands while sleeping so they don't drift apart.",
+"Some jellyfish are biologically immortal.",
+"Sharks existed before trees.",
+"Some fish can glow in the dark.",
+"Coral reefs support about 25% of all marine life.",
+"The Pacific Ocean is larger than all land on Earth combined.",
+"Starfish can regrow lost arms.",
+"Octopus arms have their own mini nervous systems.",
+"Some deep sea fish produce their own light.",
+"Sea turtles can travel thousands of miles during migration.",
+"Squid have the largest eyes in the animal kingdom.",
+"The ocean contains about 97% of Earth's water.",
+"Giant clams can weigh over 200 kilograms.",
+"Some sea cucumbers eject their organs to escape predators.",
+"Whales communicate using complex songs.",
+"Narwhals have a long spiral tusk that is actually a tooth.",
+"Sea horses are one of the few animals where the male gives birth.",
+"Some sharks can detect electrical signals from prey.",
+"The deepest known fish lives over 8 kilometers underwater.",
+"The ocean floor has mountain ranges longer than those on land.",
+"Krill are tiny creatures but feed huge whales.",
+"Some crabs decorate themselves with sponges or algae.",
+"The largest migration on Earth happens daily in the ocean.",
+"Bioluminescent plankton can make the ocean glow at night.",
+"Sea turtles return to the beach where they were born.",
+"Some octopuses can mimic other animals.",
+"The giant squid can grow longer than a bus.",
+"Sea anemones are actually animals, not plants.",
+"Some fish can walk on land for short periods.",
+"Many deep sea creatures live in complete darkness.",
+"Anglerfish use glowing lures to attract prey.",
+"The ocean has underwater waterfalls.",
+"Some coral reefs are thousands of years old.",
+"Ocean currents help regulate Earth's climate.",
+"Some sharks must keep swimming to breathe.",
+"Sea lions can hold their breath for over 20 minutes.",
+"Some whales migrate over 10,000 kilometers each year.",
+"Deep sea pressure can crush submarines.",
+"The ocean has lakes and rivers on its floor.",
+"Glass sponges can live for over 10,000 years.",
+"Some sea worms can glow brightly.",
+"Octopuses can change color instantly.",
+"The mantis shrimp has one of the fastest punches in nature.",
+"Some fish can survive in extremely salty water.",
+"Hydrothermal vents release super hot water from the seafloor.",
+"Entire ecosystems live around deep sea vents.",
+"Some jellyfish are larger than humans.",
+"The ocean floor contains massive volcano chains.",
+"Sea snakes are among the most venomous snakes.",
+"Some dolphins use sponges as tools.",
+"Some sharks glow in the dark.",
+"The deepest ocean point is nearly 11 kilometers deep.",
+"Ocean tides are mainly caused by the Moon.",
+"Some fish can inflate their bodies to scare predators.",
+"Sea stars can eat prey outside their bodies.",
+"Some plankton are smaller than a grain of sand.",
+"The ocean absorbs about 30% of carbon dioxide humans produce.",
+"Some sea slugs steal chloroplasts from algae to photosynthesize.",
+"The ocean has underwater brine pools.",
+"Some sea creatures look like aliens due to deep sea conditions.",
+"Many deep sea animals have transparent bodies.",
+"The blue whale's heart is about the size of a small car.",
+"Whales can dive deeper than 2,000 meters.",
+"Some crabs farm algae for food.",
+"The ocean contains more historical artifacts than museums.",
+"Some deep sea fish have enormous mouths.",
+"Sea cucumbers help recycle nutrients on the ocean floor.",
+"Some fish sleep inside coral reefs.",
+"The ocean floor is constantly moving due to plate tectonics.",
+"Some whales have individual dialects in their songs.",
+"Seagrass meadows store large amounts of carbon.",
+"Some octopuses carry coconut shells as shelter.",
+"Deep sea creatures often grow very slowly.",
+"Some fish can freeze and survive icy waters.",
+"The ocean has giant underwater canyons.",
+"Some sharks can live over 400 years.",
+"Greenland sharks are among the longest living vertebrates.",
+"Some marine worms can regenerate their entire bodies.",
+"Some fish can shoot jets of water to catch insects.",
+"The ocean produces over half of Earth's oxygen.",
+"Some sea spiders have legs over a meter long.",
+"Some whales have the loudest sounds in the animal kingdom.",
+"Some fish communicate by making clicking sounds.",
+"Some marine animals glow to confuse predators.",
+"Many deep sea animals have huge eyes.",
+"Ocean trenches are among the least explored places on Earth.",
+"Some sea creatures are completely gelatinous.",
+"Some octopuses build dens from shells.",
+"Marine snow is tiny particles falling through the ocean like snow.",
+"Some fish clean parasites off other fish.",
+"The ocean floor has giant methane ice deposits.",
+"Some fish can survive in almost boiling vent water.",
+"Some sharks reproduce without mating.",
+"Some fish form massive schools for protection.",
+"Some deep sea creatures have detachable glowing body parts."
+
+],
+
+
+Space:[
+"A day on Venus is longer than a year on Venus.",
+"Saturn could float in water because it is mostly gas.",
+"Tardigrades can survive in the vacuum of space.",
+"There are more stars in the universe than grains of sand on Earth.",
+"Footprints on the Moon can last millions of years.",
+"Neutron stars spin extremely fast.",
+"The universe is about 93 billion light-years wide.",
+"Light from the Sun takes about 8 minutes to reach Earth.",
+"The Sun contains about 99.8% of the mass in our solar system.",
+"Jupiter is so large that over 1,300 Earths could fit inside it.",
+"Saturn has thousands of ringlets in its ring system.",
+"Mars has the tallest volcano in the solar system.",
+"Olympus Mons on Mars is about three times taller than Mount Everest.",
+"The Milky Way galaxy contains over 100 billion stars.",
+"Black holes have gravity so strong that even light cannot escape.",
+"The Moon is slowly moving away from Earth each year.",
+"Pluto was reclassified as a dwarf planet in 2006.",
+"Venus is the hottest planet in our solar system.",
+"Uranus rotates on its side compared to other planets.",
+"Neptune has the fastest winds in the solar system.",
+"Some neutron stars spin hundreds of times per second.",
+"The Sun will eventually become a red giant star.",
+"Mercury has almost no atmosphere.",
+"The International Space Station travels around Earth every 90 minutes.",
+"Astronauts grow slightly taller in space.",
+"Space is completely silent because there is no air for sound to travel.",
+"Some galaxies are billions of light-years away from Earth.",
+"The Hubble Space Telescope has taken images of extremely distant galaxies.",
+"The first human to walk on the Moon was Neil Armstrong in 1969.",
+"One million Earths could fit inside the Sun.",
+"The coldest place in the universe is a nebula called the Boomerang Nebula.",
+"Stars are born in giant clouds of gas and dust called nebulae.",
+"A supernova is an exploding star.",
+"Supernova explosions can briefly outshine entire galaxies.",
+"The closest star system to Earth is Alpha Centauri.",
+"The center of the Milky Way contains a supermassive black hole.",
+"Some planets outside our solar system are called exoplanets.",
+"Thousands of exoplanets have already been discovered.",
+"Some exoplanets may have oceans or atmospheres.",
+"The Andromeda Galaxy will collide with the Milky Way in billions of years.",
+"The Moon has no weather or wind.",
+"The surface of the Moon is covered with fine dust called regolith.",
+"Mars has seasons similar to Earth.",
+"Saturn's moon Titan has lakes made of liquid methane.",
+"Jupiter's Great Red Spot is a giant storm larger than Earth.",
+"Neutron stars are incredibly dense.",
+"A teaspoon of neutron star material would weigh billions of tons.",
+"The Sun is about 4.6 billion years old.",
+"Stars come in different colors depending on their temperature.",
+"Blue stars are hotter than red stars.",
+"Some stars live for billions of years.",
+"The largest known stars are called hypergiants.",
+"The smallest stars are called red dwarfs.",
+"Red dwarf stars can live trillions of years.",
+"Some planets have rings like Saturn.",
+"Saturn's rings are made of ice and rock.",
+"Asteroids are rocky objects that orbit the Sun.",
+"The asteroid belt lies between Mars and Jupiter.",
+"Comets develop glowing tails when they approach the Sun.",
+"Meteor showers happen when Earth passes through comet debris.",
+"A shooting star is actually a meteor burning in Earth's atmosphere.",
+"The Moon causes tides in Earth's oceans.",
+"The Sun is a medium-sized star.",
+"Our galaxy is a spiral galaxy.",
+"Some galaxies are shaped like ellipses.",
+"Some galaxies collide and merge together.",
+"The observable universe contains billions of galaxies.",
+"Gravity keeps planets in orbit around stars.",
+"Without gravity, planets would drift into space.",
+"Some stars explode into neutron stars.",
+"Others collapse into black holes.",
+"Time slows down near extremely strong gravity.",
+"Black holes can bend light around them.",
+"The first black hole image was captured in 2019.",
+"The Moon's gravity is about one-sixth of Earth's gravity.",
+"Some moons have underground oceans.",
+"Europa, a moon of Jupiter, may have a subsurface ocean.",
+"Enceladus, a moon of Saturn, shoots water into space.",
+"Some meteors contain organic molecules.",
+"The Sun will eventually become a white dwarf.",
+"White dwarfs slowly cool over billions of years.",
+"The universe began about 13.8 billion years ago.",
+"The Big Bang theory explains the origin of the universe.",
+"The cosmic microwave background is leftover radiation from the Big Bang.",
+"Dark matter makes up much of the universe's mass.",
+"Dark energy is causing the universe to expand faster.",
+"Some stars orbit each other in binary systems.",
+"A pulsar is a rapidly spinning neutron star.",
+"Pulsars emit beams of radiation like cosmic lighthouses.",
+"The largest known galaxy is IC 1101.",
+"Some galaxies contain trillions of stars.",
+"Spacecraft have visited every planet in our solar system.",
+"Voyager 1 is the farthest human-made object from Earth.",
+"Voyager 1 has entered interstellar space.",
+"The James Webb Space Telescope studies distant galaxies.",
+"Some exoplanets orbit two stars.",
+"These planets are called circumbinary planets."
+],
+
+};
+
+const mixedFacts=[
+"Butterflies taste with their feet.",
+"Jellyfish existed before dinosaurs.",
+"A group of flamingos is called a flamboyance.",
+"The Eiffel Tower grows in summer due to heat expansion.",
+"Your stomach gets a new lining every few days."
+];
+
+
+/* ---------------- CREATURES ---------------- */
+
+const creatures=["🐉","🦊","🦉","🐰","🦄","🐢"];
+
+
+/* ---------------- GAME STATE ---------------- */
+
+let journalFacts=[];
+let discovered=0;
+let currentWorld="Earth";
+
+
+/* ---------------- CELEBRATION ---------------- */
+
+function showCelebration(text){
+
+const c=document.getElementById("celebration");
+
+c.innerText="🎉 "+text;
+
+c.classList.add("show");
+
+setTimeout(()=>c.classList.remove("show"),3000);
+
+}
+
+
+/* ---------------- PROGRESS SYSTEM ---------------- */
+
+function updateProgress(){
+
+let earth=Math.min(discovered/20*100,100);
+let ocean=Math.max(0,Math.min((discovered-20)/30*100,100));
+let space=Math.max(0,Math.min((discovered-50)/50*100,100));
+
+if(discovered>=20 && currentWorld==="Earth"){
+currentWorld="Ocean";
+showCelebration("Ocean World Unlocked!");
+}
+
+if(discovered>=50 && currentWorld==="Ocean"){
+currentWorld="Space";
+showCelebration("Space World Unlocked!");
+}
+
+document.getElementById("earthBar").style.width=earth+"%";
+document.getElementById("oceanBar").style.width=ocean+"%";
+document.getElementById("spaceBar").style.width=space+"%";
+
+document.getElementById("globalProgress").style.width=Math.min(discovered,100)+"%";
+
+document.getElementById("worldStatus").innerText="World: "+currentWorld;
+
+}
+
+
+/* ---------------- RARITY SYSTEM ---------------- */
+
+function getRarity(){
+
+const r=Math.random();
+
+if(r<0.7) return "common";
+if(r<0.9) return "rare";
+if(r<0.99) return "epic";
+
+return "legendary";
+
+}
+
+
+/* ---------------- FACT PICKER (NO REPEAT) ---------------- */
+
+function randomFact(){
+
+let facts = worldFacts[currentWorld];
+
+let available = facts.filter(f => !journalFacts.includes(f));
+
+if(available.length===0){
+available=facts;
+}
+
+return available[Math.floor(Math.random()*available.length)];
+
+}
+
+
+/* ---------------- MIXED FACT PICKER ---------------- */
+
+function randomMixedFact(){
+
+let available = mixedFacts.filter(f => !journalFacts.includes(f));
+
+if(available.length===0){
+available=mixedFacts;
+}
+
+return available[Math.floor(Math.random()*available.length)];
+
+}
+
+
+/* ---------------- FACT POPUP ---------------- */
+
+function spawnPopup(x,y,fact){
+
+const rarity=getRarity();
+
+const div=document.createElement("div");
+
+div.className=`fact-popup rarity-${rarity}`;
+
+if(!journalFacts.includes(fact)){
+journalFacts.push(fact);
+}
+
+updateJournal();
+
+discovered++;
+
+updateProgress();
+
+document.getElementById("counter").innerText="Facts discovered: "+discovered;
+
+div.innerHTML=`<b>${rarity.toUpperCase()} FACT</b><br>${fact}<br><button class='share-btn' onclick='shareFact("${fact}")'>Share</button>`;
+
+div.style.left=x+"px";
+div.style.top=y+"px";
+
+document.body.appendChild(div);
+
+setTimeout(()=>div.remove(),6000);
+
+}
+
+
+/* ---------------- PARTICLE EFFECT ---------------- */
+
+function particles(x,y){
+
+for(let i=0;i<12;i++){
+
+const p=document.createElement("div");
+
+p.className="particle";
+
+const angle=Math.random()*Math.PI*2;
+const dist=80*Math.random();
+
+p.style.left=x+"px";
+p.style.top=y+"px";
+
+p.style.setProperty("--x",Math.cos(angle)*dist+"px");
+p.style.setProperty("--y",Math.sin(angle)*dist+"px");
+
+document.body.appendChild(p);
+
+setTimeout(()=>p.remove(),1000);
+
+}
+
+}
+
+
+/* ---------------- BOX SPAWN ---------------- */
+
+function createBox(){
+
+const box=document.createElement("div");
+
+box.className="box";
+
+box.innerHTML="📦";
+
+box.style.left=Math.random()*(window.innerWidth-80)+"px";
+box.style.top=Math.random()*(window.innerHeight-80)+"px";
+
+box.onclick=(e)=>{
+
+const fact=randomFact();
+
+spawnPopup(e.clientX,e.clientY,fact);
+
+particles(e.clientX,e.clientY);
+
+box.remove();
+
+setTimeout(createBox,2000);
+
+};
+
+document.body.appendChild(box);
+
+}
+
+
+/* ---------------- CREATURE SPAWN ---------------- */
+
+function createCreature(){
+
+const c=document.createElement("div");
+
+c.className="creature";
+
+if(Math.random()<0.05){
+c.innerText="🐲";
+}else{
+c.innerText=creatures[Math.floor(Math.random()*creatures.length)];
+}
+
+c.style.left=Math.random()*(window.innerWidth-100)+"px";
+c.style.top=Math.random()*(window.innerHeight-150)+"px";
+
+c.onclick=(e)=>{
+
+const fact=randomFact();
+
+spawnPopup(e.clientX,e.clientY,fact);
+
+particles(e.clientX,e.clientY);
+
+c.remove();
+
+setTimeout(createCreature,4000);
+
+};
+
+document.body.appendChild(c);
+
+}
+
+
+/* ---------------- JOURNAL ---------------- */
+
+function updateJournal(){
+
+const list=document.getElementById("journalList");
+
+list.innerHTML="";
+
+journalFacts.slice(-25).forEach(f=>{
+
+const li=document.createElement("li");
+
+li.textContent=f;
+
+list.appendChild(li);
+
+});
+
+}
+
+function toggleJournal(){
+
+const j=document.getElementById("journal");
+
+j.style.display=j.style.display==="none"?"block":"none";
+
+}
+
+
+/* ---------------- MAP ---------------- */
+
+function showMap(){
+
+alert("Discover facts to unlock worlds!\n20 → Ocean 🌊\n50 → Space 🚀");
+
+}
+
+
+/* ---------------- SHARE ---------------- */
+
+function shareFact(fact){
+
+if(navigator.share){
+navigator.share({title:"Amazing Fact",text:fact});
+}else{
+alert("Share this fact: "+fact);
+}
+
+}
+
+
+/* ---------------- MIX FACT BUTTON ---------------- */
+
+document.getElementById("mixFactDot").onclick=function(){
+
+const fact=randomMixedFact();
+
+spawnPopup(window.innerWidth/2,window.innerHeight/2,fact);
+
+};
+
+
+/* ---------------- START GAME ---------------- */
+
+for(let i=0;i<6;i++) createBox();
+
+for(let i=0;i<4;i++) createCreature();
+
+</script>
+
+
+
+</html>
